@@ -1,0 +1,1253 @@
+openapi: 3.0.0
+info:
+  title: APIs for IITM's BS Degree TNP Portal
+  description: Comprehensive YAML Documentation for IITM's BS Degree TNP Portal APIs.
+  version: 1.0.0
+  x-developers:
+    - name: TAKKELLAPATI SATYA RATNAVATI
+      email: 21f1000641@ds.study.iitm.ac.in
+    - name: RITIK KAUSHAL
+      email: 21f1000435@ds.study.iitm.ac.in
+
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/student_signup:
+    post:
+      tags:
+        - User Registration
+      summary: Register a new student
+      operationId: studentSignup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentRegisterRequest"
+      responses:
+        "200":
+          description: User created
+          content:
+            application/json:
+              example:
+                msg: User created
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/admin_signup:
+    post:
+      tags:
+        - User Registration
+      summary: Register a new admin user
+      operationId: adminSignup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminRegisterRequest"
+      responses:
+        "200":
+          description: User created
+          content:
+            application/json:
+              example:
+                msg: User created
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/login:
+    post:
+      tags:
+        - Authentication
+
+      summary: User login
+      operationId: userLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Logged in successfully
+          content:
+            application/json:
+              example:
+                message: Logged in successfully
+                access_token: jwt_access_token
+                name: John Doe
+                role: student
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                msg: User Blocked or Invalid Credentials
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/forgot_password:
+    post:
+      tags:
+        - Authentication
+      summary: Request a OTP to reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_input:
+                  type: string
+      responses:
+        "200":
+          description: OTP requested successfully
+          content:
+            application/json:
+              example:
+                msg: Success
+                email: user@example.com
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/verify_OTP:
+    post:
+      tags:
+        - Authentication
+      summary: Verify the OTP received via email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                entered_OTP:
+                  type: string
+      responses:
+        "200":
+          description: OTP verified successfully
+          content:
+            application/json:
+              example:
+                msg: Success
+                email: user@example.com
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/reset_password:
+    post:
+      tags:
+        - Authentication
+      summary: Reset user password using verified OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                new_password:
+                  type: string
+                confirm_password:
+                  type: string
+      responses:
+        "200":
+          description: Password reset successfully
+          content:
+            application/json:
+              example:
+                msg: Success
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/interview:
+    get:
+      tags:
+        - Interviews
+
+      summary: Retrieve all interviews
+      operationId: getInterviews
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              example:
+                msg: Success
+                interviews:
+                  - id: 1
+                    company: Amazon
+                    job_role: SDE
+                    job_type: Internship
+                    description: Interview was fantastic
+                    user_name: John Doe
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    post:
+      tags:
+        - Interviews
+
+      summary: Create a new interview
+      operationId: createInterview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InterviewCreateRequest"
+      responses:
+        "200":
+          description: Interview created
+          content:
+            application/json:
+              example:
+                msg: Interview created
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    put:
+      tags:
+        - Interviews
+
+      summary: Edit an existing interview
+      operationId: editInterview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InterviewEditRequest"
+      responses:
+        "200":
+          description: Interview updated
+          content:
+            application/json:
+              example:
+                msg: Interview updated
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/interview/{id}:
+    delete:
+      tags:
+        - Interviews
+
+      summary: Delete an interview
+      operationId: deleteInterview
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Interview deleted
+          content:
+            application/json:
+              example:
+                msg: Interview deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/posts:
+    get:
+      tags:
+        - Posts
+      summary: Retrieve all posts
+      responses:
+        "200":
+          description: Posts retrieved successfully
+          content:
+            application/json:
+              example:
+                msg: Success
+                all_posts:
+                  - id: 1
+                    username: john_doe
+                    description: Need advice on starting ML projects
+                    tags: [Machine Learning, Advice]
+                    timestamp: "2023-08-12 10:00:00"
+                    replies:
+                      - id: 101
+                        username: jane_smith
+                        description: Start with linear regression
+                        timestamp: "2023-08-12 11:00:00"
+                  - id: 2
+                    username: alice_jones
+                    description: Looking for Python programming tips
+                    tags: [Python, Programming]
+                    timestamp: "2023-08-12 12:00:00"
+                    replies:
+                      - id: 102
+                        username: bob_wilson
+                        description: Use list comprehensions for concise code
+                        timestamp: "2023-08-12 13:00:00"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    post:
+      tags:
+        - Posts
+      summary: Create a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Post created successfully
+          content:
+            application/json:
+              example:
+                msg: Posted successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/posts/{postid}:
+    put:
+      tags:
+        - Posts
+      summary: Edit a post
+      parameters:
+        - in: path
+          name: postid
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  pattern: I need help with regards to Data Science roles
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    pattern: Data Science
+
+      responses:
+        "200":
+          description: Post edited successfully
+          content:
+            application/json:
+              example:
+                msg: Post edited successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    delete:
+      tags:
+        - Posts
+      summary: Delete a post
+      parameters:
+        - in: path
+          name: postid
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Post deleted successfully
+          content:
+            application/json:
+              example:
+                msg: Deleted successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Bad Request
+
+  /api/practice_tests:
+    post:
+      tags:
+        - Practice Tests
+      summary: Create a new practice test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  pattern: "Practice Test 1"
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    pattern: Amazon
+                question_ids:
+                  type: array
+                  items:
+                    type: integer
+
+      responses:
+        "200":
+          description: Practice test created successfully
+          content:
+            application/json:
+              example:
+                msg: Practice Test created
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    put:
+      tags:
+        - Practice Tests
+      summary: Edit a practice test
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                practice_test_id:
+                  type: integer
+                name:
+                  type: string
+                  example: Practice Test - 1
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    example: Amazon
+                question_ids_to_remove:
+                  type: array
+                  items:
+                    type: integer
+                question_ids_to_add:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Practice test edited successfully
+          content:
+            application/json:
+              example:
+                msg: Practice test updated
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/practice_tests/{id}:
+    get:
+      tags:
+        - Practice Tests
+      summary: Retrieve a specific practice test
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Practice test retrieved successfully
+          content:
+            application/json:
+              example:
+                msg: Success
+                practice_tests:
+                  id: 1
+                  name: Test 1
+                  tags: [tag1, tag2]
+                  questions:
+                    - id: 101
+                      name: Question 1
+                      tags: [tag5, tag6]
+                      description: What is the capital of France?
+                      question_type: MCQ
+                      options: [Paris, London, Berlin]
+                      correct_answers: [Paris]
+                    - id: 102
+                      name: Question 2
+                      tags: [tag7, tag8]
+                      description: Which of the following are programming languages?
+                      question_type: MSQ
+                      options: [Python, HTML, CSS]
+                      correct_answers: [Python, HTML, CSS]
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    delete:
+      tags:
+        - Practice Tests
+      summary: Delete a practice test
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Practice test deleted successfully
+          content:
+            application/json:
+              example:
+                msg: Practice test deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/questions:
+    get:
+      tags:
+        - Questions
+      summary: Retrieve questions
+      responses:
+        "200":
+          description: Questions retrieved successfully
+          content:
+            application/json:
+              example:
+                msg: Success
+                questions:
+                  - id: 1
+                    name: Question 1
+                    tags: [tag1, tag2]
+                    description: What is the capital of France?
+                    question_type: MCQ
+                    options: { 1: Paris, 2: London, 3: Berlin }
+                    correct_answers: [1]
+                  - id: 2
+                    name: Question 2
+                    tags: [tag3, tag4]
+                    description: Which of the following are programming languages?
+                    question_type: MSQ
+                    options: { 1: Python, 2: HTML, 3: CSS }
+                    correct_answers: [1, 2, 3]
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    post:
+      tags:
+        - Questions
+      summary: Create a new question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Sample Question"
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  example: ["tag1", "tag2"]
+                description:
+                  type: string
+                  example: "This is a sample question."
+                question_type:
+                  type: string
+                  example: "multiple_choice"
+                options:
+                  type: object
+                  properties:
+                    1:
+                      type: string
+                      example: "Option A"
+                    2:
+                      type: string
+                      example: "Option B"
+                    3:
+                      type: string
+                      example: "Option C"
+                    4:
+                      type: string
+                      example: "Option D"
+                correct_answers:
+                  type: array
+                  items:
+                    type: string
+                  example: ["1", "3"]
+
+      responses:
+        "200":
+          description: Question created successfully
+          content:
+            application/json:
+              example:
+                msg: Question created
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    put:
+      tags:
+        - Questions
+      summary: Edit a question
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question_id:
+                  type: integer
+                  example: 5
+                name:
+                  type: string
+                  example: "Sample Question"
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  example: ["tag1", "tag2"]
+                description:
+                  type: string
+                  example: "This is a sample question."
+                question_type:
+                  type: string
+                  example: "multiple_choice"
+                options:
+                  type: object
+                  properties:
+                    option1:
+                      type: string
+                      example: "Option A"
+                    option2:
+                      type: string
+                      example: "Option B"
+                    option3:
+                      type: string
+                      example: "Option C"
+                    option4:
+                      type: string
+                      example: "Option D"
+                correct_answers:
+                  type: array
+                  items:
+                    type: string
+                  example: ["option1", "option3"]
+
+      responses:
+        "200":
+          description: Question edited successfully
+          content:
+            application/json:
+              example:
+                msg: Question updated
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/questions/{id}:
+    delete:
+      tags:
+        - Questions
+      summary: Delete a question
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Question deleted successfully
+          content:
+            application/json:
+              example:
+                msg: Question deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/reply:
+    post:
+      tags:
+        - Reply
+      summary: Create a new reply to a post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                post_id:
+                  type: integer
+                  example: 12345
+                username:
+                  type: string
+                  example: "john_doe"
+                description:
+                  type: string
+                  example: "This is a sample post."
+
+      responses:
+        "200":
+          description: Reply created successfully
+          content:
+            application/json:
+              example:
+                msg: Reply created successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/reply/{id}:
+    put:
+      tags:
+        - Reply
+      summary: Update a reply.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: "This is a sample description."
+
+      responses:
+        "200":
+          description: Reply edited
+          content:
+            application/json:
+              example:
+                msg: Reply edited
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    delete:
+      tags:
+        - Reply
+      summary: Delete a reply.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Reply deleted
+          content:
+            application/json:
+              example:
+                msg: Reply Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/users/{username}:
+    get:
+      tags:
+        - Users
+
+      description: Get user's data for dashboard
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              example:
+                msg: Success
+                user:
+                  email: user@example.com
+                  name: Example
+                  username: example_user
+                  level: BS
+                  github_link: "https://github.com/example"
+                  linkedin_link: "https://www.linkedin.com/in/example"
+
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+  /api/users:
+    put:
+      tags:
+        - Users
+
+      description: Update user's info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                github_link:
+                  type: string
+                  example: "https://github.com/example"
+                linkedin_link:
+                  type: string
+                  example: "https://www.linkedin.com/in/example"
+
+      responses:
+        "200":
+          description: Updated Successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+    patch:
+      tags:
+        - Users
+
+      description: Block/Unblock a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 3
+                block:
+                  type: string
+                  example: "yes"
+
+      responses:
+        "200":
+          description: Updated Successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                msg: Custom Message based on where the request failed
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                msg: Internal Server Error
+
+components:
+  schemas:
+    StudentRegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          pattern: "abc@mail\\.com"
+        password:
+          type: string
+          pattern: "123456"
+        confirm_password:
+          type: string
+          pattern: "123456"
+
+        name:
+          type: string
+          pattern: "name"
+        username:
+          type: string
+          pattern: "username"
+        level:
+          type: string
+          pattern: "Diploma"
+        github_link:
+          type: string
+          pattern: "https://github\\.com/johndoe"
+        linkedin_link:
+          type: string
+          pattern: "https://linkedin\\.com/johndoe"
+      required:
+        - email
+        - password
+        - confirm_password
+        - name
+        - username
+        - level
+    AdminRegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          pattern: "abc@mail\\.com"
+        password:
+          type: string
+          pattern: "123456"
+        confirm_password:
+          type: string
+          pattern: "123456"
+
+        name:
+          type: string
+          pattern: "name"
+        username:
+          type: string
+          pattern: "username"
+        level:
+          type: string
+          pattern: "SupportStaff"
+        github_link:
+          type: string
+          pattern: "https://github\\.com/johndoe"
+        linkedin_link:
+          type: string
+          pattern: "https://linkedin\\.com/johndoe"
+
+      required:
+        - email
+        - password
+        - confirm_password
+        - name
+        - username
+        - level
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          pattern: "abc@mail\\.com"
+
+        password:
+          type: string
+          pattern: "123456"
+      required:
+        - email
+        - password
+    InterviewCreateRequest:
+      type: object
+      properties:
+        company:
+          type: string
+          pattern: "Amazon"
+        job_role:
+          type: string
+          pattern: "SDE"
+        job_type:
+          type: string
+          pattern: "Internship"
+        anonymous:
+          type: boolean
+          pattern: "True"
+        description:
+          type: string
+          pattern: "Description of the interview"
+      required:
+        - company
+        - job_role
+        - job_type
+        - anonymous
+        - description
+    InterviewEditRequest:
+      type: object
+      properties:
+        interview_id:
+          type: integer
+          pattern: "0"
+        company:
+          type: string
+          pattern: "Amazon"
+        job_role:
+          type: string
+          pattern: "SDE"
+        job_type:
+          type: string
+          pattern: "FTE"
+        anonymous:
+          type: boolean
+          pattern: "False"
+        description:
+          type: string
+          pattern: "Description of the interview"
+      required:
+        - interview_id

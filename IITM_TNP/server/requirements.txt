@@ -1,6 +1,0 @@
-Flask
-Flask-jwt-extended
-Flask-restful
-Flask-SQLAlchemy
-Flask-CORS
-Celery

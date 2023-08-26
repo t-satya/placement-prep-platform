@@ -1,4 +1,0 @@
-git remote set-url origin git@github.com:t-satya/se_collab.git
-git config --global user.name "t-satya"
-git config --global user.email "21f1000641@ds.study.ac.in"
-git clone git@github.com:t-satya/se_collab.git

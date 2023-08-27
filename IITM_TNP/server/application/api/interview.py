@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required,get_jwt_identity
 from utils.roles_accepted import roles_accepted
 from utils.error_codes import InterviewAPIErrors
 from utils.constants import JOB_TYPE_ALLOWED
+from datetime import datetime
 
 class InterviewAPI(Resource):
     def get(self):
@@ -28,7 +29,10 @@ class InterviewAPI(Resource):
                     "job_role" : interview.job_role,
                     "job_type" : interview.job_type,
                     "description" : interview.description,
-                    "user_name" : interview.created_by.name if not interview.anonymous else "Anonymous"
+                    "user_id":interview.user_id,
+                    "user_name" : interview.created_by.name if not interview.anonymous else "Anonymous",
+                    "timestamp":str(interview.timestamp),
+
                 }
                 payload.append(data)
 
@@ -72,7 +76,7 @@ class InterviewAPI(Resource):
                 return {"msg" : InterviewAPIErrors.DESCRIPTION_REQUIRED.description } , InterviewAPIErrors.DESCRIPTION_REQUIRED.status_code
 
             # Create the interview and add it to database
-            interview = Interviews(**data, user_id=user.get("id"))
+            interview = Interviews(**data, user_id=user.get("id"),timestamp = datetime.today())
             db.session.add(interview)
             db.session.commit()
 
@@ -126,9 +130,9 @@ class InterviewAPI(Resource):
                 else:
                     return {"msg" : InterviewAPIErrors.INVALID_JOB_TYPE.description } , InterviewAPIErrors.INVALID_JOB_TYPE.status_code
 
-            if data.get("anonymous")=="False":
+            if data.get("anonymous")==False:
                 interview.anonymous = False
-            elif data.get("anonymous")=="True":
+            elif data.get("anonymous")==True:
                 interview.anonymous = True
 
             if data.get("description"):

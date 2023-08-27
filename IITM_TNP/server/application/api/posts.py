@@ -72,7 +72,9 @@ class PostsAPI(Resource):
             new_post = Posts(
                 description = data.get("description"),
                 tags = data.get("tags"),
-                user_id = curr_user["id"]
+                user_id = curr_user["id"],
+                timestamp = datetime.today()
+
             )
             db.session.add(new_post)
             db.session.commit()

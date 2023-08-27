@@ -10,21 +10,16 @@ import {
   MDBModalFooter
 } from 'mdb-vue-ui-kit';
 
-import { ref, watch, onMounted, computed } from 'vue';
-import { routerKey } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter, useRoute } from 'vue-router';
-const router = useRouter();
-const route = useRoute();
+
 const store = useStore();
 const curr_user_id = computed(() => store.getters.get_user_id);
 
 
 
 onMounted(() => {
-  // if (store.getters.get_login_status == true) router.push("/posts");
   store.dispatch('fetchPosts');
-
 })
 const posts = computed(() => store.getters.get_all_posts); // Use a computed property
 const editedDescription = ref('');

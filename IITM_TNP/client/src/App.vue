@@ -1,16 +1,25 @@
 <script setup>
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { RouterView } from 'vue-router';
-import Navbar from './components/Navbar/Navbar.vue';
+import UserNavbar from './components/Navbar/UserNavbar.vue';
+import AdminNavbar from "./components/Navbar/AdminNav.vue";
+
+import { useStore } from 'vuex';
 import Auth from './components/Auth/Auth.vue';
+
+const store = useStore();
+const loggedIn = computed(() => store.getters.get_login_status);
+const role = computed(() => store.getters.get_role);
+
 
 </script>
 
 <template>
-  <Auth />
+  <Auth></Auth>
   <div class="app-container">
     <div class="navbar-view-container">
-      <Navbar />
+      <AdminNavbar v-if="role == 'admin' && loggedIn" />
+      <UserNavbar v-else />
     </div>
     <div class="router-view-container">
       <main>

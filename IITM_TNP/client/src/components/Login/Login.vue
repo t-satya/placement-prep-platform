@@ -8,7 +8,7 @@ import {
     MDBInput,
     MDBCheckbox
 } from 'mdb-vue-ui-kit';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { routerKey } from 'vue-router';
 import { useStore } from 'vuex';
 import axios from 'axios';
@@ -19,6 +19,8 @@ const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
+console.log(store);
+
 
 // States
 const email = ref("");
@@ -28,11 +30,17 @@ const check = ref(false);
 const passwordType = ref("password");
 const error = ref("");
 const message = ref(null);
+const error_message = ref(null);
+const loadingButton = ref(false);
 
 message.value = route.query.msg || null;
+error_message.value = route.query.error_msg || null;
+
 
 // Functions
 function login() {
+    loadingButton.value = true;
+    error_message.value = null;
     const data = {
         email: email.value,
         password: password.value
@@ -46,15 +54,17 @@ function login() {
 
     axios.post(LOGIN_URL_BACKEND, data, options).then((res) => {
         store.dispatch("loginUser", { data: res.data });
-        console.log(store.getters.jwt_token,"login") 
-        router.push("/posts");
+
     }).catch((err) => {
-        if (err.response.data.msg) error.value = err.response.data.msg;
-        else error.value = "Something went wrong!"
+        if (err.response) {
+            if (err.response.data.msg) error.value = err.response.data.msg;
+            else error.value = "Something went wrong!";
+        }
+        else error.value = "Something went wrong!";
+        loadingButton.value = false;
     })
 
 }
-
 
 // Hooks
 watch(check, (newVal, oldVal) => {
@@ -66,9 +76,15 @@ watch(check, (newVal, oldVal) => {
     }
 })
 
-onMounted(() => {
-    if (store.getters.get_login_status == true) router.push("/posts");
 
+// To redirect when already logged in
+const loggedIn = computed(() => store.getters.get_login_status);
+const role = computed(() => store.getters.get_role);
+watch(loggedIn, (newVal, oldVal) => {
+    if (newVal == true) {
+        if (role.value === 'admin') router.push("/admin/questions");
+        else router.push("/posts");
+    }
 })
 
 </script>
@@ -79,6 +95,9 @@ onMounted(() => {
         <form class="p-4 rounded bg-white" style="width: 75%; max-width: 500px;">
             <div class="alert alert-success" role="alert" v-if="message">
                 {{ message }}
+            </div>
+            <div class="alert alert-danger" role="alert" v-if="error_message">
+                {{ error_message }}
             </div>
             <div class="d-flex flex-column justify-content-center align-items-center h-100">
                 <a href="/">
@@ -106,7 +125,13 @@ onMounted(() => {
                 </MDBRow>
                 <!-- Submit button -->
                 <div class="text-center">
-                    <MDBBtn color="primary" class="text-center" @click="login"> Login </MDBBtn>
+                    <MDBBtn color="primary" class="text-center d-flex justify-content-center align-items-center"
+                        :disabled="loadingButton" @click="login">
+                        <div class="spinner-border text-light" role="status" v-if="loadingButton">
+                            <span class="visually-hidden"></span>
+                        </div>
+                        <span class="m-2">Login</span>
+                    </MDBBtn>
                 </div>
             </div>
         </form>

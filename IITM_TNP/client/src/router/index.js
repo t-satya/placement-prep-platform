@@ -3,7 +3,11 @@ import HomeView from '../views/HomeView.vue';
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import PostView from "../views/PostView.vue";
-import InterviewsView from "../views/InterviewsView.vue"
+import QuestionsView from "../views/Admin/QuestionsView.vue";
+import store from "../store";
+import axios from 'axios';
+import { VERIFY_TOKEN_URL_BACKEND } from "../utils/constants.js";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,7 +29,19 @@ const router = createRouter({
     {
       path: '/posts',
       name: 'posts',
-      component: PostView
+      component: PostView,
+      meta: {
+        isRequiredAuth: true,
+      }
+    },
+    {
+      path: '/admin/questions',
+      name: 'admin_questions',
+      component: QuestionsView,
+      meta: {
+        isRequiredAuth: true,
+        admissibleRoles: ["admin", "super admin"]
+      }
     },
     {
       path:"/interview",
@@ -33,6 +49,48 @@ const router = createRouter({
       component: InterviewsView
     }
   ]
+})
+
+
+
+router.beforeEach((to, from, next) => {
+  const isRequiredAuth = to?.meta?.isRequiredAuth
+  const admissibleRoles = to?.meta?.admissibleRoles
+
+  const token = localStorage.getItem("jwt_token");
+  if (isRequiredAuth) {
+    if (token) {
+      const options = {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }
+      axios.get(VERIFY_TOKEN_URL_BACKEND, options).then((res) => {
+        store.dispatch("loginUser", { data: { name: res.data.name, role: res.data.role } });
+
+        if (admissibleRoles) {
+          if (admissibleRoles.length != 0 && admissibleRoles.includes(res.data.role)) {
+            next();
+          }
+          else {
+            store.dispatch("logoutUser")
+            next("/login?error_msg=Unauthorised");
+          }
+        }
+        else next();
+      })
+        .catch((err) => {
+          console.log(err)
+          store.dispatch("setLoadingStatus", { data: { loading: false } })
+          next("/login?error_msg=Please login");
+        })
+    }
+    else {
+      store.dispatch("setLoadingStatus", { data: { loading: false } })
+      next("/login?error_msg=Please login");
+    }
+  }
+  else next();
 })
 
 export default router

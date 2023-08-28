@@ -4,6 +4,8 @@ import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import PostView from "../views/PostView.vue";
 import QuestionsView from "../views/Admin/QuestionsView.vue";
+import InterviewsView from "../views/InterviewsView.vue";
+import PracticeTestsView from "../views/Admin/PracticeTestsView.vue"
 import store from "../store";
 import axios from 'axios';
 import { VERIFY_TOKEN_URL_BACKEND } from "../utils/constants.js";
@@ -35,6 +37,15 @@ const router = createRouter({
       }
     },
     {
+      path:"/admin/practice_tests",
+      name:'practice_tests',
+      component: PracticeTestsView,
+      meta:{
+        isRequiredAuth: true,
+        admissibleRoles: ["admin", "super admin"]
+      }
+    },
+    {
       path: '/admin/questions',
       name: 'admin_questions',
       component: QuestionsView,
@@ -46,7 +57,10 @@ const router = createRouter({
     {
       path:"/interview",
       name: "interview",
-      component: InterviewsView
+      component: InterviewsView,
+      meta: {
+        isRequiredAuth: true,
+      }
     }
   ]
 })

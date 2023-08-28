@@ -8,3 +8,4 @@ export const BASE_URL_INTERVIEWS = BASE_URL_BACKEND + "/api/interview"
 export const ADD_QUESTION_URL_BACKEND = BASE_URL_BACKEND + "/api/question";
 export const GET_QUESTIONS_ADMIN_URL_BACKEND = BASE_URL_BACKEND + "/api/question";
 export const DELETE_QUESTIONS_ADMIN_URL_BACKEND = BASE_URL_BACKEND + "/api/question";
+export const BASE_URL_PRACTICE_TESTS = BASE_URL_BACKEND + "/api/practice_tests"

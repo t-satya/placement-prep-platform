@@ -83,6 +83,7 @@ const role = computed(() => store.getters.get_role);
 watch(loggedIn, (newVal, oldVal) => {
     if (newVal == true) {
         if (role.value === 'admin') router.push("/admin/questions");
+        else if (role.value === 'super admin') router.push("/admin/questions");
         else router.push("/posts");
     }
 })

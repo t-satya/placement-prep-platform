@@ -43,12 +43,14 @@ class PracticeTestAPI(Resource):
                 practice_tests = PracticeTests.query.all()
 
                 for practice_test in practice_tests:
+                    ques_ids = [ques.id for ques in practice_test.questions]
                     data = {
                         "id" : practice_test.id,
                         "name" : practice_test.name,
-                        "tags" : practice_test.tags
+                        "tags" : practice_test.tags,
+                        "ques_ids":ques_ids
                     }
-
+                    # print(ques_ids)
                     payload.append(data)
                 return {"msg" : "Success", "practice_tests" : payload}
         except Exception as e:
@@ -137,7 +139,7 @@ class PracticeTestAPI(Resource):
             
             if data.get("name"):
                 test = PracticeTests.query.filter_by(name=data.get("name")).first()
-                if test :
+                if test and test.id!=practice_test.id :
                     return {"msg" : PracticeTestAPIErrors.PRACTICE_TEST_EXISTS.description}, PracticeTestAPIErrors.PRACTICE_TEST_EXISTS.status_code
                 practice_test.name = data.get("name")
 

@@ -51,6 +51,7 @@ function redirect(path) {
             <MDBNavbarNav class="mb-2 mb-lg-0" right>
                 <MDBTabs>
                     <MDBTabNav pills color="primary">
+                        <MDBTabItem tabId="register admin" @click="redirect('/admin/register')">Register Admin</MDBTabItem>
                         <MDBTabItem tabId="posts" @click="redirect('/posts')">Posts</MDBTabItem>
                         <MDBTabItem tabId="interviews" @click="redirect('/interview')">Interviews</MDBTabItem>
                         <MDBTabItem tabId="practice" @click="redirect('/admin/practice_tests')">Practice</MDBTabItem>

@@ -9,7 +9,7 @@ import PracticeTestsView from "../views/Admin/PracticeTestsView.vue"
 import StudentPracticeTestView from "../views/PracticeTestsStudentView.vue"
 import TestView from "../views/TestView.vue"
 import StudentTestView from "../views/StudentTestView.vue"
-
+import AdminRegister from "../views/Admin/AdminRegisterView.vue"
 import store from "../store";
 import axios from 'axios';
 import { VERIFY_TOKEN_URL_BACKEND } from "../utils/constants.js";
@@ -64,6 +64,15 @@ const router = createRouter({
       meta: {
         isRequiredAuth: true,
         admissibleRoles: ["admin", "super admin"]
+      }
+    },
+    {
+      path: '/admin/register',
+      name: 'admin_register',
+      component: AdminRegister,
+      meta: {
+        isRequiredAuth: true,
+        admissibleRoles: ["super admin"]
       }
     },
     {

@@ -9,3 +9,4 @@ export const ADD_QUESTION_URL_BACKEND = BASE_URL_BACKEND + "/api/question";
 export const GET_QUESTIONS_ADMIN_URL_BACKEND = BASE_URL_BACKEND + "/api/question";
 export const DELETE_QUESTIONS_ADMIN_URL_BACKEND = BASE_URL_BACKEND + "/api/question";
 export const BASE_URL_PRACTICE_TESTS = BASE_URL_BACKEND + "/api/practice_tests"
+export const ADMIN_REGISTER_URL_BACKEND = BASE_URL_BACKEND + "/api/admin_signup"

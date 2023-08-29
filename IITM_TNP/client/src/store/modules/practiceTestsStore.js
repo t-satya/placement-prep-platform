@@ -30,10 +30,8 @@ const actions = {
   async fetchPracticeTests({ commit }) {
     const token = localStorage.getItem("jwt_token")
     const headers = {Authorization: `Bearer ${token}`}
-    console.log(headers)
     try {
       const response = await axios.get(BASE_URL_PRACTICE_TESTS,{ headers });  
-      console.log(response.data.practice_tests); 
       commit('setPracticeTests',response.data.practice_tests );
     } catch (error) {
       console.error('Error fetching PracticeTests:', error);
@@ -42,7 +40,6 @@ const actions = {
   async fetchAPracticeTest({ commit },data) {
     const token = localStorage.getItem("jwt_token")
     const headers = {Authorization: `Bearer ${token}`}
-    console.log(headers)
     try {
       const response = await axios.get(`${BASE_URL_PRACTICE_TESTS}/${data}`,{ headers });  
       commit('setCurrentTest',response.data.practice_tests );

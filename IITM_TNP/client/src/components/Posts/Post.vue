@@ -21,7 +21,24 @@ const curr_user_id = computed(() => store.getters.get_user_id);
 onMounted(() => {
   store.dispatch('fetchPosts');
 })
-const posts = computed(() => store.getters.get_all_posts); // Use a computed property
+const props = defineProps({
+    search: {
+        type: String,
+        default: ""
+    }
+})
+const posts = computed(() => {
+    const allPosts = store.getters.get_all_posts;
+
+    if (props.search)
+        return allPosts.filter(post =>
+        post.username.toLowerCase().includes(props.search.toLowerCase()) ||
+
+            post.description.toLowerCase().includes(props.search.toLowerCase()) ||
+            post.tags.some(tag => tag.toLowerCase().includes(props.search.toLowerCase()))
+        );
+    else return allPosts;
+});
 const editedDescription = ref('');
 const editingPostId = ref(null);
 const showEditModal = ref(false); // Reactive variable to control modal visibility

@@ -1,16 +1,12 @@
 <script setup>
-import { useStore } from 'vuex';
-import { computed } from 'vue';
-import Interviews from "../components/Interviews/interviews.vue"
+import StudentPracticeTests from '../components/PracticeTests/StudentPracticeTest.vue';
 import { MDBInput, MDBBtn } from 'mdb-vue-ui-kit';
 import { ref } from 'vue';
 
 const search = ref("");
-const store = useStore();
-const loggedIn = computed(() => store.getters.get_login_status);
-console.log(loggedIn.value)
 
 </script>
+
 <template>
     <div class="d-flex justify-content-end mb-2">
         <div>
@@ -27,5 +23,7 @@ console.log(loggedIn.value)
         </div>
         
     </div>
-    <Interviews :search="search"/>
+            
+        
+    <StudentPracticeTests :search="search" />
 </template>

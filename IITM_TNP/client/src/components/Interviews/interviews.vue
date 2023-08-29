@@ -15,7 +15,26 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const curr_user_id = computed(() => store.getters.get_user_id);
-const interviews = computed(() => store.getters.get_all_interviews);
+const props = defineProps({
+    search: {
+        type: String,
+        default: ""
+    }
+})
+const interviews = computed(() => {
+    const allInterviews = store.getters.get_all_interviews;
+
+    if (props.search)
+        return allInterviews.filter(interview =>
+            interview.user_name.toLowerCase().includes(props.search.toLowerCase()) ||
+            interview.description.toLowerCase().includes(props.search.toLowerCase()) ||
+            interview.job_role.toLowerCase().includes(props.search.toLowerCase()) ||
+            interview.job_type.toLowerCase().includes(props.search.toLowerCase()) ||
+            interview.company.toLowerCase().includes(props.search.toLowerCase()) 
+        );
+    else return allInterviews;
+});
+// const interviews = computed(() => store.getters.get_all_interviews);
 const showAddInterviewModal = ref(false);
 // {
 //                     "id" : interview.id,

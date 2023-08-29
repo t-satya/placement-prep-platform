@@ -29,7 +29,7 @@ class QuestionAPI(Resource):
                 }
                 payload.append(data)
 
-            print(payload)
+            # print(payload)
             return {"msg" : "Success", "questions" : payload}
         
         except Exception as e:
@@ -147,6 +147,31 @@ class QuestionAPI(Resource):
 
             if data.get("description"):
                 question.description = data.get("description")
+
+            if data.get("question_type"):
+                if data.get("question_type")  in ['MCQ', 'MSQ']:
+                    if not isinstance(data.get("options"), dict):
+                        return {"msg" : QuestionAPIErrors.INVALID_OPTIONS.description}, QuestionAPIErrors.INVALID_OPTIONS.status_code
+                    elif not has_required_keys(data.get("options")):
+                        return {"msg" : QuestionAPIErrors.OPTIONS_REQUIRED.description}, QuestionAPIErrors.OPTIONS_REQUIRED.status_code
+
+                if data.get("question_type")  in ['MCQ', 'MSQ', 'NAT']:
+                    if not isinstance(data.get("correct_answers"), list):
+                        return {"msg" : QuestionAPIErrors.INVALID_ANSWER.description}, QuestionAPIErrors.INVALID_ANSWER.status_code
+                    elif len(list(data.get("correct_answers")))==0:
+                        return {"msg" : QuestionAPIErrors.ANSWER_REQUIRED.description}, QuestionAPIErrors.ANSWER_REQUIRED.status_code
+
+                    elif data.get("question_type") != 'NAT' and not set(data.get("correct_answers")).issubset(data.get("options").keys()):
+                        return {"msg" : QuestionAPIErrors.ANSWER_REQUIRED.description}, QuestionAPIErrors.ANSWER_REQUIRED.status_code
+
+                if data.get("question_type") in ['NAT','Coding']:
+                    data["options"] = {}
+                    question.options = data["options"]
+
+                
+                if data.get("question_type") in ['Coding']:
+                    data["correct_answers"] = []
+                question.question_type=data.get("question_type")
             
             if data.get("options"):
                 if not isinstance(data.get("options"), dict):

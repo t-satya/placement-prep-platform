@@ -16,14 +16,21 @@ const linkedin_link = ref("");
 const name = ref("")
 const user_id = computed(()=>store.getters.get_user_id)
 const user_data = computed(()=>store.getters.get_user_data)
+watch(user_data, (newUserData) => {
+    if (newUserData) {
+        github_link.value = newUserData.github_link
+        linkedin_link.value = newUserData.linkedin_link
+        name.value = newUserData.name
+    }
+})
 
 onMounted(() => {
+    github_link.value="";
+    linkedin_link.value="";
+    name.value="";
     console.log(user_id)
     console.log(user_data.value)
     store.dispatch("fetchUserData",user_id.value)
-    github_link.value = user_data.value.github_link
-    linkedin_link.value = user_data.value.linkedin_link
-    name.value = user_data.value.name
 })
 
 function update_profile(){

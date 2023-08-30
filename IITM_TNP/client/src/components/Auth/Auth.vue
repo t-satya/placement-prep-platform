@@ -17,7 +17,8 @@ onMounted(() => {
             }
         }
         axios.get(VERIFY_TOKEN_URL_BACKEND, options).then((res) => {
-            store.dispatch("loginUser", { data: { name: res.data.name, role: res.data.role } })
+            store.dispatch("loginUser", { data: { name: res.data.name, role: res.data.role, user_id: res.data.user_id } })
+            console.log(res.data,"auth")
         })
             .catch((err) => {
                 store.dispatch("setLoadingStatus", { data: { loading: false } })

@@ -10,6 +10,7 @@ import StudentPracticeTestView from "../views/PracticeTestsStudentView.vue"
 import TestView from "../views/TestView.vue"
 import StudentTestView from "../views/StudentTestView.vue"
 import AdminRegister from "../views/Admin/AdminRegisterView.vue"
+import Settings from "../views/SettingsView.vue"
 import store from "../store";
 import axios from 'axios';
 import { VERIFY_TOKEN_URL_BACKEND } from "../utils/constants.js";
@@ -36,6 +37,14 @@ const router = createRouter({
       path: '/posts',
       name: 'posts',
       component: PostView,
+      meta: {
+        isRequiredAuth: true,
+      }
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings,
       meta: {
         isRequiredAuth: true,
       }
@@ -119,7 +128,7 @@ router.beforeEach((to, from, next) => {
         }
       }
       axios.get(VERIFY_TOKEN_URL_BACKEND, options).then((res) => {
-        store.dispatch("loginUser", { data: { name: res.data.name, role: res.data.role } });
+        store.dispatch("loginUser", { data: { name: res.data.name, role: res.data.role,user_id:res.data.user_id } });
 
         if (admissibleRoles) {
           if (admissibleRoles.length != 0 && admissibleRoles.includes(res.data.role)) {

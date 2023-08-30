@@ -54,6 +54,7 @@ function login() {
 
     axios.post(LOGIN_URL_BACKEND, data, options).then((res) => {
         store.dispatch("loginUser", { data: res.data });
+        console.log(res.data)
 
     }).catch((err) => {
         if (err.response) {

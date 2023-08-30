@@ -254,10 +254,9 @@ class VerifyToken(Resource):
             data = {
                 "name": curr_user.name,
                 "role": curr_user.role,
-                "user_id":curr_user.id
-                
+                "user_id":user_id
             }
-
+            print(data)
             return jsonify(data)    
         except Exception as e:
             return {"msg" : AuthenticationAPIErrors.INTERNAL_ERROR.description } , AuthenticationAPIErrors.INTERNAL_ERROR.status_code

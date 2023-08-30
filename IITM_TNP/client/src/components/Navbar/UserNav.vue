@@ -49,7 +49,10 @@ function redirect(path) {
                     <MDBTabNav pills color="primary">
                         <MDBTabItem tabId="practice" v-if="loggedIn" @click="redirect('/practice')">Practice</MDBTabItem>
                         <MDBTabItem tabId="posts" @click="redirect('/posts')">Posts</MDBTabItem>
+                        
                         <MDBTabItem tabId="interviews" @click="redirect('/interview')">Interviews</MDBTabItem>
+                        <MDBTabItem tabId="settings" v-if="loggedIn" @click="redirect('/settings')">Settings</MDBTabItem>
+ 
                         <MDBTabItem tabId="logout" v-if="loggedIn" @click="logout">Logout</MDBTabItem>
                         <MDBTabItem tabId="login" v-if="!loggedIn" @click="redirect('/login')">Login</MDBTabItem>
                         <MDBTabItem tabId="register" v-if="!loggedIn" @click="redirect('/register')">Register</MDBTabItem>

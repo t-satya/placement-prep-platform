@@ -10,14 +10,14 @@ from utils.constants import USER_LEVELS_ALLOWED, ADMIN_LEVELS_ALLOWED
 
 class UsersAPI(Resource):
 
-    def get(self,username=None):
+    def get(self,id=None):
         """
             Get user's data for dashboard
         """
         try:
-            user = User.query.filter_by(username = username).first()
+            user = User.query.filter_by(id = id).first()
             
-            if not user or user.role in ["admin","super admin"]:
+            if not user:
                 return {"msg" : UsersAPIErrors.USER_NOT_EXIST.description } , UsersAPIErrors.USER_NOT_EXIST.status_code
 
             payload = {}
@@ -27,9 +27,8 @@ class UsersAPI(Resource):
             payload["level"] = user.level
             payload["github_link"] = user.github_link
             payload["linkedin_link"] = user.linkedin_link
-
+            print(payload)
             return {"msg" : "Success", "user" : payload},200
-
         except Exception as e:
             print(e)
             return {"msg" : UsersAPIErrors.INTERNAL_ERROR.description } , UsersAPIErrors.INTERNAL_ERROR.status_code
@@ -40,7 +39,7 @@ class UsersAPI(Resource):
         """
             User can update his info
 
-            {
+            {   "name":"",
                 "github_link" : ""\n,
                 "linkedin_link" : ""\n
             }
@@ -54,6 +53,8 @@ class UsersAPI(Resource):
 
             if data.get("github_link"):
                 user.github_link = data.get("github_link")
+            if data.get("name"):
+                user.name = data.get("name")
             
             if data.get("linkedin_link"):
                 user.linkedin_link = data.get("linkedin_link")

@@ -1,5 +1,9 @@
 import router from "@/router";
+import { BASE_URL_USER_DATA } from "../../utils/constants.js";
+import axios from 'axios';
+import { useStore } from "vuex"
 
+const store = useStore()
 
 // Initial State of the store
 const state = () => ({
@@ -8,7 +12,9 @@ const state = () => ({
     // log: 
     role: "",
     name: "",
-    loading: true
+    loading: true,
+    user_id:"",
+    user_data:{}
 })
 
 // Getters
@@ -28,6 +34,12 @@ const getters = {
     },
     get_role(state) {
         return state.role
+    },
+    get_user_id(state){
+        return state.user_id
+    },
+    get_user_data(state){
+        return state.user_data;
     }
 }
 
@@ -38,8 +50,8 @@ const mutations = {
         state.name = data.name;
         state.role = data.role;
         state.loading = false;
+        state.user_id = data.user_id
         if (data.access_token) localStorage.setItem("jwt_token", data.access_token);
-
 
     },
     logout(state) {
@@ -51,6 +63,9 @@ const mutations = {
     },
     setLoading(state, data) {
         state.loading = data.loading;
+    },
+    setUserData(state,data){
+        state.user_data=data;
     }
 
 }
@@ -66,7 +81,28 @@ const actions = {
     },
     setLoadingStatus({ commit }, { data }) {
         commit('setLoading', data)
-    }
+    },
+    async fetchUserData({ commit },user_id) {
+        const token = localStorage.getItem("jwt_token")
+        const headers = {Authorization: `Bearer ${token}`}
+        try {
+          const response = await axios.get(`${BASE_URL_USER_DATA}/${user_id}`,{ headers });  
+          commit('setUserData',response.data.user );
+          console.log(response.data)
+        } catch (error) {
+          console.error('Error fetching UserData:', error);
+        }
+      },
+      async updateUserData({ dispatch },data,user_id) {
+        const token = localStorage.getItem("jwt_token")
+        const headers = {Authorization: `Bearer ${token}`}
+        try {
+          const response = await axios.put(`${BASE_URL_USER_DATA}`,data,{ headers });  
+        } catch (error) {
+          console.error('Error updating UserData:', error);
+        }
+      },
+    
 
 
 }

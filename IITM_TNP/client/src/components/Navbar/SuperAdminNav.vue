@@ -56,6 +56,8 @@ function redirect(path) {
                         <MDBTabItem tabId="interviews" @click="redirect('/interview')">Interviews</MDBTabItem>
                         <MDBTabItem tabId="practice" @click="redirect('/admin/practice_tests')">Practice</MDBTabItem>
                         <MDBTabItem tabId="questions" @click="redirect('/admin/questions')">Questions</MDBTabItem>
+                        <MDBTabItem tabId="settings" v-if="loggedIn" @click="redirect('/settings')">Settings</MDBTabItem>
+
                         <MDBTabItem tabId="logout" v-if="loggedIn" @click="logout">Logout</MDBTabItem>
                         <MDBTabItem tabId="login" v-else @click="login">Logout</MDBTabItem>
                     </MDBTabNav>

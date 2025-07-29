@@ -1,0 +1,7 @@
+flask
+flask-restful
+flask-jwt-extended
+celery
+redis[celery]
+flask-sqlalchemy
+mailhog
